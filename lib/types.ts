@@ -9,6 +9,8 @@ export interface Circuit {
   status: CircuitStatus
   substation: string
   notes: string
+  lat?: number
+  lng?: number
   geojson?: GeoJSON.Feature | null
 }
 

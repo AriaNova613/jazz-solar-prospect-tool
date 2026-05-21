@@ -280,16 +280,27 @@ export default function Map({
     }
   }, [prospects, mapReady, onProspectSelect])
 
-  // Draw buffer when a circuit is selected (if we have a clicked point)
-  // This is a simplified version — in practice the buffer would be around the circuit polyline
+  // Fly to circuit center and draw buffer when a circuit is selected
   useEffect(() => {
     if (!mapReady || !map.current) return
     const src = map.current.getSource('circuit-buffer') as maplibregl.GeoJSONSource
     if (!src) return
-    if (!selectedCircuit) {
+
+    if (!selectedCircuit?.lat || !selectedCircuit?.lng) {
       src.setData({ type: 'FeatureCollection', features: [] })
+      return
     }
-  }, [selectedCircuit, mapReady])
+
+    map.current.flyTo({
+      center: [selectedCircuit.lng, selectedCircuit.lat],
+      zoom: Math.max(map.current.getZoom(), 9),
+      duration: 900,
+    })
+
+    const pt = turf.point([selectedCircuit.lng, selectedCircuit.lat])
+    const buf = turf.buffer(pt, bufferKm, { units: 'kilometers' })
+    src.setData(buf ?? { type: 'FeatureCollection', features: [] })
+  }, [selectedCircuit, bufferKm, mapReady])
 
   return (
     <div className="relative w-full h-full">

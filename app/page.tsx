@@ -68,10 +68,20 @@ export default function HomePage() {
   }, [])
 
   const handleFindParcels = useCallback(() => {
-    if (!selectedCircuit) return
-    // For MVP: open LIO Crown Land viewer. Full implementation would query LIO REST API with buffer.
-    window.open('https://geohub.lio.gov.on.ca/maps/lio::crown-land-use-policy-atlas', '_blank')
-  }, [selectedCircuit])
+    if (!selectedCircuit?.lat || !selectedCircuit?.lng) return
+    // Compute bbox from circuit center + buffer radius, open LIO Crown Land Atlas at that extent
+    const R = 111.32
+    const latD = bufferKm / R
+    const lngD = bufferKm / (R * Math.cos(selectedCircuit.lat * Math.PI / 180))
+    const xmin = (selectedCircuit.lng - lngD).toFixed(4)
+    const ymin = (selectedCircuit.lat - latD).toFixed(4)
+    const xmax = (selectedCircuit.lng + lngD).toFixed(4)
+    const ymax = (selectedCircuit.lat + latD).toFixed(4)
+    window.open(
+      `https://geohub.lio.gov.on.ca/maps/lio::crown-land-use-policy-atlas?extent=${xmin},${ymin},${xmax},${ymax}`,
+      '_blank'
+    )
+  }, [selectedCircuit, bufferKm])
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
