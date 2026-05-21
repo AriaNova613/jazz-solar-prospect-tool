@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JAZZ Solar · Ontario Prospect Tool
 
-## Getting Started
+Web-based map tool for finding Ontario land near transmission lines suitable for solar ground-mount projects. Hosted on Vercel, no API keys required.
 
-First, run the development server:
+## What it does
+
+- **Map view** — Ontario 115/230/500 kV transmission lines (from OpenStreetMap), Crown land overlay (LIO CLUPA), and prospect pins color-coded by available MW
+- **Circuit panel** — click any circuit in the sidebar to see available capacity (energy + capacity streams), land requirements, and rough interconnect cost context
+- **Prospect panel** — click any prospect pin to see property details, copy ARN to clipboard, open GeoWarehouse in one click
+- **Prospect pipeline** — `/prospects` table view with sort/filter, totals, and pipeline status tracking
+- **"Find land" button** — with a circuit selected, opens the LIO Crown Land Atlas to screen nearby parcels
+
+## What it cannot do
+
+- **Find parcels automatically** — LIO parcel search within circuit buffer is scaffolded but not wired end-to-end (needs Supabase + PostGIS for spatial queries; see roadmap)
+- **Show owner names** — parcel geometry + PIN/ARN is free from LIO; owner name requires GeoWarehouse/Teraview
+- **Access Hydro One distribution data** — no public API; manually parse their PDF if needed
+- **Cover zones outside Ottawa** — circuit data is Ottawa-zone only; add rows to `data/circuits.json` for other zones
+- **Persist prospects across deploys** — prospects are in-memory server-side for MVP; add Vercel KV or Supabase for persistence
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy to Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Push this folder to a GitHub repo
+2. Import the repo in Vercel — zero config required
+3. Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+No environment variables needed for the MVP.
 
-## Learn More
+## Data sources (all free / open)
 
-To learn more about Next.js, take a look at the following resources:
+| Layer | Source | License |
+|-------|--------|---------|
+| Transmission lines | OpenStreetMap via Overpass API | ODbL |
+| Crown land overlay | Ontario LIO CLUPA (WMS) | OGL-ON (free commercial) |
+| Federal Crown land | LIO + NRCan | OGL-ON / OGL-CA |
+| Parcel geometry + PIN/ARN | Ontario LIO / GeoHub | OGL-ON (geometry free; owner restricted) |
+| Circuit capacity (Ottawa) | IESO LT2-c May 2025 + LT2-e Sept 2024 | Public |
+| Basemap | OpenFreeMap (OSM vector tiles) | ODbL |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Circuit data
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Edit `data/circuits.json` to add circuits for other Ontario zones. Fields:
 
-## Deploy on Vercel
+| Field | Description |
+|-------|-------------|
+| `energy_mw` | Max IBR MW from LT2-e energy stream (Sept 2024, concluded). 0 = AVOID. |
+| `capacity_mw` | Max IBR MW from LT2-c capacity stream (May 2025). 0 = AVOID. |
+| `status` | `good` / `limited` / `avoid` — controls color coding |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Bright-line defaults: 75 MW per 115 kV circuit, 250 MW per 230 kV circuit (Southern Ontario).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Roadmap
+
+- [ ] LIO parcel REST query within circuit buffer (requires Supabase + PostGIS)
+- [ ] Vercel KV for persistent prospect storage
+- [ ] All Ontario zones (Essa, East, West, Southwest, etc.)
+- [ ] KMZ upload → nearest circuits analysis
+- [ ] Interconnect cost estimator ($/MW by spur distance to tap + substation)
+- [ ] OEB CCIM integration when public API is available
+- [ ] Hydro One station capacity PDF parser for DX prospects

@@ -1,0 +1,60 @@
+{
+  "circuits": [
+    { "id": "M32S",   "voltage_kv": 230, "zone": "Ottawa", "energy_mw": 250, "capacity_mw": 250, "status": "good",     "substation": "Ottawa area (230 kV)", "notes": "BEST — 250 MW IBR; 230 kV network; no restriction in either IESO doc" },
+    { "id": "C3S",    "voltage_kv": 230, "zone": "Ottawa", "energy_mw": 250, "capacity_mw": 250, "status": "good",     "substation": "Ottawa area (230 kV)", "notes": "BEST — 250 MW IBR; 230 kV network; no restriction in either IESO doc" },
+    { "id": "L24A",   "voltage_kv": 230, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 80,  "status": "limited",  "substation": "Ottawa area (230 kV)", "notes": "80 MW IBR capacity stream; AVOID in LT2-e energy stream" },
+    { "id": "M5G",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 75,  "status": "good",     "substation": "Ottawa area",          "notes": "75 MW IBR / 150 MW Sync" },
+    { "id": "M4G",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 75,  "status": "good",     "substation": "Ottawa area",          "notes": "75 MW IBR / 110 MW Sync" },
+    { "id": "A4K",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 75,  "status": "good",     "substation": "Ottawa area",          "notes": "75 MW IBR" },
+    { "id": "F10MV",  "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 75,  "status": "good",     "substation": "Ottawa area",          "notes": "75 MW IBR" },
+    { "id": "A5RK",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 75,  "status": "good",     "substation": "Ottawa area",          "notes": "75 MW IBR / 100 MW Sync" },
+    { "id": "A2",     "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 75,  "status": "good",     "substation": "Ottawa area",          "notes": "75 MW IBR" },
+    { "id": "V12M",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 60,  "status": "good",     "substation": "Ottawa area",          "notes": "60 MW IBR capacity stream; 75 MW LT2-e bright-line" },
+    { "id": "L2M_N",  "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 40,  "status": "limited",  "substation": "North of Chesterville","notes": "40 MW IBR capacity stream (North of Chesterville section only)" },
+    { "id": "A3RM",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 40,  "status": "limited",  "substation": "Ottawa area",          "notes": "40 MW IBR capacity stream" },
+    { "id": "A8M",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 75,  "capacity_mw": 30,  "status": "limited",  "substation": "Ottawa area",          "notes": "30 MW IBR capacity stream" },
+    { "id": "L2M",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 30,  "status": "limited",  "substation": "East of St. Lawrence", "notes": "30 MW IBR capacity stream; AVOID in LT2-e energy stream. Use L2M_N section instead." },
+    { "id": "M1R",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 10,  "status": "limited",  "substation": "Limebank / Ottawa Airport area", "notes": "10 MW IBR capacity stream; AVOID in LT2-e. Rob email: 75 MW uses bright-line but circuit specifically restricted." },
+    { "id": "S7M",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — both LT2-e and LT2-c" },
+    { "id": "A6R",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — both LT2-e and LT2-c" },
+    { "id": "79M1",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "A41T",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "A42T",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "M30A",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "M31A",   "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "B5D",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "D5A",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "H9A",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "X2Y",    "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "X522A",  "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" },
+    { "id": "X523A",  "voltage_kv": 115, "zone": "Ottawa", "energy_mw": 0,   "capacity_mw": 0,   "status": "avoid",    "substation": "Ottawa area",          "notes": "AVOID — LT2-c May 2025" }
+  ],
+  "sources": {
+    "energy_mw": "IESO LT2-e Preliminary Connection Guidance Issue 2.0, Sept 6 2024",
+    "capacity_mw": "IESO LT2-c Guidance Methodology, May 15 2025",
+    "bright_line_115kv": 75,
+    "bright_line_230kv_south": 250
+  },
+  "prospects": [
+    {
+      "id": "p001",
+      "name": "Ottawa Airport Crown Land",
+      "pin": "043310310",
+      "arn": "061411640190450",
+      "owner": "H.M. THE KING (CANADA) — DEPT OF TRANSPORT AIR SERVICES BRANCH",
+      "owner_type": "federal_crown",
+      "area_acres": 505.335,
+      "circuit_id": "M1R",
+      "lat": 45.316,
+      "lng": -75.637,
+      "solar_mw_potential": 101,
+      "solar_mw_capped": 10,
+      "status": "researching",
+      "contact_name": "TBD — Federal Crown (Transport Canada)",
+      "contact_phone": "",
+      "contact_email": "",
+      "notes": "Visit Ottawa Clerk's office (blue binders). Circuit limited to 10 MW capacity stream, AVOID in energy stream — consider if adjacent [M5G] or [M4G] could serve instead. AoFPN partnership (Korey).",
+      "created": "2026-05-19"
+    }
+  ]
+}
