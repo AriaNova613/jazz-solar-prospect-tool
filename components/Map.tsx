@@ -74,7 +74,8 @@ export default function Map({
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const [mapReady, setMapReady] = useState(false)
-  const [loadingLines, setLoadingLines] = useState(false)
+  const [lineStatus, setLineStatus] = useState<{ state: 'idle' | 'loading' | 'ok' | 'error'; count?: number; msg?: string }>({ state: 'idle' })
+  const fetchingRef = useRef(false)
   const markersRef = useRef<maplibregl.Marker[]>([])
 
   // Initialize map
@@ -184,12 +185,8 @@ export default function Map({
       setMapReady(true)
     })
 
-    // Load transmission lines when map moves significantly
-    map.current.on('moveend', () => {
-      if (map.current!.getZoom() >= 7) {
-        loadTransmissionLines()
-      }
-    })
+    // Reload transmission lines when map moves
+    map.current.on('moveend', loadTransmissionLines)
 
     return () => {
       map.current?.remove()
@@ -198,35 +195,38 @@ export default function Map({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Load OSM transmission lines directly from Overpass (supports CORS, no proxy needed)
   const loadTransmissionLines = useCallback(async () => {
-    if (!map.current || loadingLines) return
-    const bounds = map.current.getBounds()
-    const query = buildOverpassQuery(bounds)
-    setLoadingLines(true)
+    if (!map.current || fetchingRef.current) return
+    fetchingRef.current = true
+    setLineStatus({ state: 'loading' })
     try {
+      const bounds = map.current.getBounds()
+      const query = buildOverpassQuery(bounds)
       const res = await fetch(OVERPASS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `data=${encodeURIComponent(query)}`,
       })
-      if (res.ok) {
-        const data = await res.json()
-        const geojson = overpassToGeoJSON(data)
-        ;(map.current!.getSource('tx-lines') as maplibregl.GeoJSONSource)?.setData(geojson)
+      if (!res.ok) {
+        setLineStatus({ state: 'error', msg: `HTTP ${res.status}` })
+        return
       }
+      const data = await res.json()
+      const geojson = overpassToGeoJSON(data)
+      if (map.current) {
+        (map.current.getSource('tx-lines') as maplibregl.GeoJSONSource)?.setData(geojson)
+      }
+      setLineStatus({ state: 'ok', count: geojson.features.length })
     } catch (e) {
-      console.error('Overpass fetch failed:', e)
+      setLineStatus({ state: 'error', msg: String(e) })
     } finally {
-      setLoadingLines(false)
+      fetchingRef.current = false
     }
-  }, [loadingLines])
+  }, [])
 
-  // Initial line load when map is ready
   useEffect(() => {
     if (mapReady) loadTransmissionLines()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapReady])
+  }, [mapReady, loadTransmissionLines])
 
   // Toggle Crown land layer
   useEffect(() => {
@@ -309,10 +309,21 @@ export default function Map({
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
-      {loadingLines && (
+      {lineStatus.state === 'loading' && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full shadow text-xs text-gray-600 flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
           Loading transmission lines…
+        </div>
+      )}
+      {lineStatus.state === 'error' && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-red-50 border border-red-200 px-3 py-1 rounded-full shadow text-xs text-red-700 flex items-center gap-2">
+          TX lines failed: {lineStatus.msg}
+          <button onClick={loadTransmissionLines} className="underline ml-1">Retry</button>
+        </div>
+      )}
+      {lineStatus.state === 'ok' && lineStatus.count === 0 && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-yellow-50 border border-yellow-200 px-3 py-1 rounded-full shadow text-xs text-yellow-700">
+          No TX lines found in this area (OSM data may be sparse)
         </div>
       )}
       {/* Voltage legend */}
