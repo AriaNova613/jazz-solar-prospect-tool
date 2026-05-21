@@ -6,8 +6,9 @@ import FilterRail from '@/components/FilterRail'
 import ContextPanel from '@/components/ContextPanel'
 import { Circuit, Prospect } from '@/lib/types'
 import circuitsData from '@/data/circuits.json'
-import { Sun, List } from 'lucide-react'
+import { List } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 // MapLibre must be loaded client-side only (no SSR)
 const Map = dynamic(() => import('@/components/Map'), {
@@ -88,11 +89,8 @@ export default function HomePage() {
       {/* Header */}
       <header className="bg-slate-900 text-white px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <Sun size={20} className="text-yellow-400" />
-          <div>
-            <span className="font-bold text-sm">JAZZ Solar</span>
-            <span className="text-slate-400 text-sm"> · Ontario Prospect Tool</span>
-          </div>
+          <Image src="/jazz-logo.jpg" alt="JAZZ Solar Solutions" width={80} height={32} className="h-8 w-auto object-contain rounded" />
+          <span className="text-slate-400 text-sm">Ontario Prospect Tool</span>
         </div>
         <nav className="flex items-center gap-4 text-sm">
           <span className="text-slate-400">

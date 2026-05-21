@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Prospect, getTierColor } from '@/lib/types'
-import { Sun, ArrowLeft, ExternalLink, Copy } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Copy } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const STATUS_ORDER: Prospect['status'][] = [
   'identified', 'researching', 'contacted', 'negotiating',
@@ -73,7 +74,7 @@ export default function ProspectsPage() {
       {/* Header */}
       <header className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Sun size={20} className="text-yellow-400" />
+          <Image src="/jazz-logo.jpg" alt="JAZZ Solar Solutions" width={80} height={32} className="h-8 w-auto object-contain rounded" />
           <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm">
             <ArrowLeft size={14} /> Map View
           </Link>
