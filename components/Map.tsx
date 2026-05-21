@@ -19,13 +19,15 @@ interface MapProps {
   bufferKm: number
 }
 
+const OVERPASS_URL = 'https://overpass-api.de/api/interpreter'
+
 // Overpass query for Ontario HV lines in a bounding box
 function buildOverpassQuery(bounds: maplibregl.LngLatBounds): string {
   const s = bounds.getSouth().toFixed(4)
   const w = bounds.getWest().toFixed(4)
   const n = bounds.getNorth().toFixed(4)
   const e = bounds.getEast().toFixed(4)
-  return `[out:json][timeout:60];(way["power"="line"]["voltage"~"^(115000|230000|500000)$"](${s},${w},${n},${e}););out geom;`
+  return `[out:json][timeout:25];(way["power"="line"]["voltage"~"^(115000|230000|500000)$"](${s},${w},${n},${e}););out geom;`
 }
 
 // Convert Overpass response to GeoJSON FeatureCollection
@@ -196,23 +198,25 @@ export default function Map({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Load OSM transmission lines via our proxy
+  // Load OSM transmission lines directly from Overpass (supports CORS, no proxy needed)
   const loadTransmissionLines = useCallback(async () => {
     if (!map.current || loadingLines) return
     const bounds = map.current.getBounds()
     const query = buildOverpassQuery(bounds)
     setLoadingLines(true)
     try {
-      const res = await fetch('/api/overpass', {
+      const res = await fetch(OVERPASS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `data=${encodeURIComponent(query)}`,
       })
       if (res.ok) {
         const data = await res.json()
         const geojson = overpassToGeoJSON(data)
         ;(map.current!.getSource('tx-lines') as maplibregl.GeoJSONSource)?.setData(geojson)
       }
+    } catch (e) {
+      console.error('Overpass fetch failed:', e)
     } finally {
       setLoadingLines(false)
     }
